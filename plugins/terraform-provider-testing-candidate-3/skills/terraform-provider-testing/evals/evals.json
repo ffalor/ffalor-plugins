@@ -1,0 +1,65 @@
+{
+  "skill_name": "terraform-provider-testing",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review the acceptance tests for a new CrowdStrike Terraform resource. It has required name, optional description, an unordered host_groups set, API-generated id and modified_on fields, update-in-place for description and host_groups, import by id, and Read/Delete not-found handling. Produce a concrete coverage plan that follows this repository's conventions.",
+      "expected_output": "A consolidated CrowdStrike-aware lifecycle plan using local acctest helpers, typed checks, API verification, import, drift/disappearance, and tferrors semantics without retesting Core set behavior.",
+      "files": [],
+      "expectations": [
+        "Uses internal/acctest conventions and gofalcon/testconfig for remote checks.",
+        "Covers create, in-place update with stable identity, clearing/removal, import, Read disappearance, Delete not-found, and remote destroy verification.",
+        "Uses order-independent set assertions and does not test generic Core deduplication.",
+        "Distinguishes Terraform state assertions from proof that the Falcon API received values."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write the acceptance-test structure for a resource whose scope attribute uses RequiresReplace. I need proof that Terraform plans replacement, the new ID differs, and the old remote object is deleted. Use terraform-plugin-testing v1.14.0.",
+      "expected_output": "A correct normal applied replacement step using ConfigPlanChecks.PreApply and CompareValue, without the invalid PlanOnly/PreApply combination.",
+      "files": [],
+      "expectations": [
+        "Does not combine PlanOnly true with ConfigPlanChecks.PreApply.",
+        "Asserts ResourceActionReplace or a justified exact replacement order before apply.",
+        "Compares IDs across applied steps and verifies the old remote ID is absent.",
+        "Does not call t.Parallel together with resource.ParallelTest."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Design tests for a required password_wo write-only argument paired with password_wo_version. The password must reach the API but never enter Terraform plan or state. The resource is importable and the provider uses Plugin Framework 1.17.",
+      "expected_output": "Version-gated safe write-only tests that use configuration, a version trigger, indirect API effects, and a justified import ignore without leaking the password.",
+      "files": [],
+      "expectations": [
+        "Gates the test to Terraform 1.11 or later.",
+        "Explains that write-only values are read from configuration and are absent from plan/state artifacts.",
+        "Uses password_wo_version or secure private-state logic to detect changes.",
+        "Ignores only the unreconstructable write-only value during import and never prints or exact-asserts the secret."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "A singular Terraform data source looks up a Falcon object by an optional name filter. The API can return zero, one, or multiple matches and the output includes a nested computed object. Plan an efficient unit and acceptance test suite.",
+      "expected_output": "A data-source-specific plan covering filtering/cardinality helpers, lookup diagnostics, nested state, unknown/deferred inputs, and refresh without resource CRUD/import cases.",
+      "files": [],
+      "expectations": [
+        "Does not propose Create, Update, Delete, replacement, CheckDestroy, or import tests for the data source.",
+        "Unit-tests query/filter/cardinality logic and acceptance-tests real API/framework integration.",
+        "Covers zero, one, and multiple match semantics plus nested computed state.",
+        "Includes unknown/deferred input or explains why it is inapplicable."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Review a test PR that adds t.Parallel before resource.ParallelTest, uses PlanOnly true with ConfigPlanChecks.PreApply for replacement, indexes a set, sleeps 20 seconds for eventual consistency, and ignores three readable fields during import verification.",
+      "expected_output": "A severity-ordered review identifying every correctness and reliability defect with actionable fixes.",
+      "files": [],
+      "expectations": [
+        "Flags double parallelization and explains that ParallelTest already calls t.Parallel.",
+        "Flags the incompatible PlanOnly/PreApply combination and recommends a correct applied replacement check.",
+        "Rejects set indexing, fixed sleeps, and unjustified readable-field import ignores.",
+        "Orders findings by correctness, leakage, and flakiness risk."
+      ]
+    }
+  ]
+}

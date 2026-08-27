@@ -74,6 +74,96 @@
         "tracking"
       ],
       "category": "productivity"
+    },
+    {
+      "name": "terraform-provider-testing-candidate-1",
+      "source": "./plugins/terraform-provider-testing-candidate-1",
+      "description": "Bake-off candidate 1 (PR #134) of the terraform-provider-testing skill. Unmodified agent output, packaged for side-by-side review.",
+      "author": {
+        "name": "ffalor",
+        "url": "https://github.com/ffalor"
+      },
+      "license": "MIT",
+      "keywords": [
+        "terraform",
+        "provider",
+        "acceptance-tests",
+        "plugin-testing",
+        "bakeoff"
+      ],
+      "category": "development"
+    },
+    {
+      "name": "terraform-provider-testing-candidate-2",
+      "source": "./plugins/terraform-provider-testing-candidate-2",
+      "description": "Bake-off candidate 2 (PR #135) of the terraform-provider-testing skill. Unmodified agent output, packaged for side-by-side review.",
+      "author": {
+        "name": "ffalor",
+        "url": "https://github.com/ffalor"
+      },
+      "license": "MIT",
+      "keywords": [
+        "terraform",
+        "provider",
+        "acceptance-tests",
+        "plugin-testing",
+        "bakeoff"
+      ],
+      "category": "development"
+    },
+    {
+      "name": "terraform-provider-testing-candidate-3",
+      "source": "./plugins/terraform-provider-testing-candidate-3",
+      "description": "Bake-off candidate 3 (PR #136) of the terraform-provider-testing skill. Unmodified agent output, packaged for side-by-side review.",
+      "author": {
+        "name": "ffalor",
+        "url": "https://github.com/ffalor"
+      },
+      "license": "MIT",
+      "keywords": [
+        "terraform",
+        "provider",
+        "acceptance-tests",
+        "plugin-testing",
+        "bakeoff"
+      ],
+      "category": "development"
+    },
+    {
+      "name": "terraform-provider-testing-candidate-4",
+      "source": "./plugins/terraform-provider-testing-candidate-4",
+      "description": "Bake-off candidate 4 (PR #137) of the terraform-provider-testing skill. Unmodified agent output, packaged for side-by-side review.",
+      "author": {
+        "name": "ffalor",
+        "url": "https://github.com/ffalor"
+      },
+      "license": "MIT",
+      "keywords": [
+        "terraform",
+        "provider",
+        "acceptance-tests",
+        "plugin-testing",
+        "bakeoff"
+      ],
+      "category": "development"
+    },
+    {
+      "name": "terraform-provider-testing-combined",
+      "source": "./plugins/terraform-provider-testing-combined",
+      "description": "Merged winner of the terraform-provider-testing bake-off: the strongest base skill with verified grafts from the candidates, corrected against this provider's source and pinned dependency versions.",
+      "author": {
+        "name": "ffalor",
+        "url": "https://github.com/ffalor"
+      },
+      "license": "MIT",
+      "keywords": [
+        "terraform",
+        "provider",
+        "acceptance-tests",
+        "plugin-testing",
+        "go"
+      ],
+      "category": "development"
     }
   ]
 }

@@ -1,0 +1,80 @@
+{
+  "skill_name": "terraform-provider-testing",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add acceptance tests for a new crowdstrike_widget resource. Schema: required name and region, optional description, optional tags set, optional+computed enabled with a default of true, computed id and last_updated. region is force-new. Update-in-place for everything else. Importable by id.",
+      "expected_output": "One baseline TestCase covering minimal create, import verify, full config, mutation, and removal back to minimal, plus a separate TestCase for region replacement. Repo helpers throughout. Optionals asserted as Null when unset.",
+      "files": [],
+      "assertions": [
+        "Uses acctest.RandomResourceName, acctest.PreCheck, and acctest.ProtoV6ProviderFactories rather than defining local factories or calling helper/acctest directly.",
+        "Asserts unset optional description and tags with knownvalue.Null(), never StringExact(\"\") or ListSizeExact(0).",
+        "Asserts the optional+computed enabled attribute against its literal default value rather than NotNull().",
+        "Includes a step that removes every optional back to the minimal config and asserts the result.",
+        "Puts region replacement in its own TestCase asserting ResourceActionDestroyBeforeCreate plus a changed id via compare.ValuesDiffer().",
+        "Uses ConfigStateChecks with statecheck and knownvalue, not the Check field with resource.TestCheck* helpers."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Review this import step and tell me if it is correct:\n\n{\n    ResourceName:      resourceName,\n    ImportState:       true,\n    ImportStateVerify: true,\n    ImportStateKind:   resource.ImportBlockWithID,\n}",
+      "expected_output": "Identifies that the combination is rejected by terraform-plugin-testing and splits it into two steps.",
+      "files": [],
+      "assertions": [
+        "States that ImportStateVerify is not supported with plannable import blocks and that this step fails rather than passing.",
+        "Recommends dropping ImportStateKind to keep ImportStateVerify, since the deep comparison is what catches a Read gap.",
+        "Offers the separate ImportBlockWithID step using ImportPlanChecks.PreApply with ResourceActionNoop as the way to also cover the block workflow.",
+        "Does not suggest ImportStatePersist as a workaround, which is rejected for the same kinds."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Why is this failing? I get 'testing: t.Parallel called multiple times' on TestAccWidget_basic, and a separate test errors with 'TestStep ConfigPlanChecks.PreApply cannot be run with PlanOnly' when I try to assert my force-new attribute plans a replacement.",
+      "expected_output": "Diagnoses both: ParallelTest already calls t.Parallel, and PreApply plan checks require a real apply step.",
+      "files": [],
+      "assertions": [
+        "Explains resource.ParallelTest already calls t.Parallel() internally, so the explicit call must be removed.",
+        "Explains PlanOnly skips the pre-apply plan, so PreApply checks cannot run, and gives the applied-step alternative.",
+        "Notes that the replacement assertion should pair the plan action check with a changed id to prove it actually replaced.",
+        "Does not recommend ExpectNonEmptyPlan as a substitute for the action assertion."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I need to test that an optional description field can be cleared. Setting description = \"\" in the config gives me a validation error, so should I just skip the clearing test?",
+      "expected_output": "Explains the flex and validator null contract: empty string is deliberately unconfigurable, and clearing means omitting the attribute.",
+      "files": [],
+      "assertions": [
+        "Explains that a schema validator such as StringNotWhitespace deliberately rejects \"\" so that config and state cannot disagree.",
+        "Says clearing is tested by omitting the attribute from the config, asserting knownvalue.Null().",
+        "Does not suggest removing the validator or asserting StringExact(\"\").",
+        "Optionally notes the empty-string config is a valid ExpectError case, not a lifecycle case."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Plan the tests for a plural data source that lists Falcon objects with an optional name filter. Output includes a nested computed object per result. Keep it cheap.",
+      "expected_output": "Data-source-only plan: filter and cardinality helpers as unit tests, one acceptance test comparing against a created resource, empty collection rather than null for zero results.",
+      "files": [],
+      "assertions": [
+        "Proposes no Create, Update, Delete, replacement, CheckDestroy, or import tests for the data source.",
+        "Unit-tests the filtering, pagination, and cardinality logic rather than driving those cases through Terraform.",
+        "Asserts an empty collection rather than null when the filter matches nothing, and explains that length/contains/for_each fail on null.",
+        "Uses CompareValuePairs against a resource created in the same config to verify exposed attributes.",
+        "Asserts membership rather than an exact total count unless the filter makes the count deterministic."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Run the acceptance tests for the host_groups package and report what fails.",
+      "expected_output": "Uses the direct go test invocation rather than a make target, and captures output for inspection.",
+      "files": [],
+      "assertions": [
+        "Uses TF_ACC=1 go test ./internal/host_groups rather than PKG=host_groups make acctest.",
+        "Does not run a make target that would reformat or autofix source files as a side effect.",
+        "Captures the run to a file and greps it rather than re-running repeatedly to inspect output.",
+        "Notes that FALCON_CLIENT_ID and FALCON_CLIENT_SECRET must be set."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "terraform-provider-testing-candidate-1",
+  "description": "Bake-off candidate 1 (PR #134) of the terraform-provider-testing skill. Unmodified agent output, packaged for side-by-side review.",
+  "version": "1.0.0",
+  "author": {
+    "name": "ffalor",
+    "url": "https://github.com/ffalor"
+  },
+  "license": "MIT",
+  "keywords": [
+    "terraform",
+    "provider",
+    "acceptance-tests",
+    "plugin-testing",
+    "bakeoff"
+  ]
+}

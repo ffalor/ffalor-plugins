@@ -1,0 +1,4 @@
+interface:
+  display_name: "Terraform Provider Testing"
+  short_description: "Design and review Framework provider tests"
+  default_prompt: "Use $terraform-provider-testing to design a thorough test plan for this Terraform Plugin Framework resource."

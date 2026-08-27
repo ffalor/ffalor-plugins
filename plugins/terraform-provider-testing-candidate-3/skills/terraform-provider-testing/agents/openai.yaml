@@ -1,0 +1,11 @@
+interface:
+  display_name: Terraform Provider Testing
+  short_description: Design and review reliable Plugin Framework tests
+  default_prompt: Use $terraform-provider-testing to design, implement, or review a risk-based test suite for this Terraform Plugin Framework resource or data source.
+policy:
+  products:
+    - chatgpt
+    - codex
+    - api
+    - atlas
+  allow_implicit_invocation: true

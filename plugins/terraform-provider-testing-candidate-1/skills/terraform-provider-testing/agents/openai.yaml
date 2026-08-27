@@ -1,0 +1,4 @@
+interface:
+  display_name: "Terraform Provider Testing"
+  short_description: "Test Plugin Framework resources and data sources"
+  default_prompt: "Use $terraform-provider-testing to design and review lifecycle tests for this Terraform Plugin Framework resource."

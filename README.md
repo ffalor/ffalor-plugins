@@ -18,6 +18,11 @@ claude plugin install <plugin>@ffalor-plugins
 | `submit-review` | Posts a code review with line-level comments to a GitHub PR via the `gh` CLI. |
 | `terraform-framework-reference` | Vendors the Terraform Plugin Framework and plugin-testing docs at the exact version your provider's `go.mod` compiles against, so lookups are verbatim and offline. Sync with `/terraform-framework-reference:update`. |
 | `track-implementation` | Implements a spec while maintaining a running `implementation-notes.html` of design decisions, deliberate deviations, tradeoffs, and open questions. |
+| `terraform-provider-testing-candidate-1` | Bake-off candidate 1 (PR #134) of the terraform-provider-testing skill, unmodified, for side-by-side review. |
+| `terraform-provider-testing-candidate-2` | Bake-off candidate 2 (PR #135) of the terraform-provider-testing skill, unmodified, for side-by-side review. |
+| `terraform-provider-testing-candidate-3` | Bake-off candidate 3 (PR #136) of the terraform-provider-testing skill, unmodified, for side-by-side review. |
+| `terraform-provider-testing-candidate-4` | Bake-off candidate 4 (PR #137) of the terraform-provider-testing skill, unmodified, for side-by-side review. |
+| `terraform-provider-testing-combined` | Merged winner of the bake-off: the strongest base skill with verified grafts from the candidates. |
 
 ## Layout
 
