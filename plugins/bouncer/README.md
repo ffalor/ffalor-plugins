@@ -43,7 +43,7 @@ context. Start a new session after adding or changing a rule (per-session load).
 
 ## Rule format
 
-```md
+````md
 ---
 description: "Do not extract 1-2 line functions that only wrap an expression — inline them"
 condition: "(?m)\\{\\s*return [^;{}\\n]+;?\\s*\\}|\\b(?:const|let|var)\\s+[\\w$]+\\s*=\\s*(\\([^)]*\\)|[a-zA-Z_$][\\w$]*)\\s*=>\\s*[^{\\n]+$"
@@ -86,7 +86,7 @@ const displayName = user.profile.displayName;
 - Public API, test seam, or DI boundary needs indirection.
 
 If none apply, inline it.
-```
+````
 
 ### Per-rule fields
 
