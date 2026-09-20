@@ -11,8 +11,10 @@
       "source": "./plugins/bouncer",
       "description": "Deny or annotate risky Edit/Write/Bash tool calls whose content matches markdown guardrail rules; forge new rules from complaints with the omfg skill.",
       "author": {
-        "name": "claude-mod"
+        "name": "Frank Falor",
+        "url": "https://github.com/ffalor"
       },
+      "license": "MIT",
       "keywords": [
         "guardrails",
         "tool-call",

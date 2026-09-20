@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "description": "Bouncer for Claude Code: discover OMP-compatible markdown rules and deny or nudge risky Edit/Write/Bash calls before they run.",
   "author": {
-    "name": "claude-mod"
+    "name": "Frank Falor",
+    "url": "https://github.com/ffalor"
   },
+  "license": "MIT",
   "userConfig": {
     "enabled": {
       "type": "boolean",
