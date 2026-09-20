@@ -1,6 +1,7 @@
 {
   "name": "ffalor-plugins",
   "description": "Personal Claude Code plugin marketplace. Holds plugins ffalor maintains, plus vetted copies of third-party plugins.",
+  "version": "1.0.0",
   "owner": {
     "name": "ffalor",
     "url": "https://github.com/ffalor"
