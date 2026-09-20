@@ -1,7 +1,6 @@
 # Bouncer mod for Claude Code (tool-call subset)
 
-Bouncer, ported to Claude Code function hooks for the
-cases that map faithfully: **tool-call guardrails**. A markdown rule names a
+A markdown rule names a
 recognizable mistake as a regex; when a tool call introduces matching content,
 the mod denies the call with the rule body as the error (default), or lets it
 run and appends the body as model-only result context (`interruptMode: never`).
@@ -18,21 +17,16 @@ a `condition:` is also a Bouncer rule; files without one are plain instruction
 files and are ignored here.
 Native `paths:` doubles as the Bouncer path gate when no `globs:` is given.
 
-- `no-box-leak.md` (in this repo's `.claude/rules/`) — `condition:
-  'Box::leak\('` scoped to `tool:edit(*.rs)` / `tool:write(*.rs)`.
-- `no-any-assertion.md` — `\bas\s+any\b` on the edit/write `*.ts` scope.
-
 ## Install
 
 ```sh
-claude plugin marketplace add /path/to/claude-mod
-claude plugin install bouncer@claude-mod
+claude plugin marketplace add ffalor/ffalor-plugins
+claude plugin install bouncer@ffalor-plugins
 ```
 
-Or session-only: `claude --plugin-dir /path/to/claude-mod/bouncer`.
+Or session-only: `claude --plugin-dir <checkout>/ffalor-plugins/plugins/bouncer`.
 Function-hook mods are early access and only load with
-`CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1` in the environment
-(this repo sets it in `.claude/settings.json`).
+`CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1` in the environment.
 
 ## Rule locations (first discovery wins per rule name)
 
