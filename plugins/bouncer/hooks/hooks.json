@@ -1,0 +1,4 @@
+{
+  "description": "Bouncer tool-call guard: match Edit/Write/Bash arguments against markdown stream rules and deny or annotate before execution.",
+  "modules": ["./register.ts"]
+}

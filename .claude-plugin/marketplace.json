@@ -7,6 +7,21 @@
   },
   "plugins": [
     {
+      "name": "bouncer",
+      "source": "./plugins/bouncer",
+      "description": "Deny or annotate risky Edit/Write/Bash tool calls whose content matches markdown guardrail rules; forge new rules from complaints with the omfg skill.",
+      "author": {
+        "name": "claude-mod"
+      },
+      "keywords": [
+        "guardrails",
+        "tool-call",
+        "regex",
+        "rules"
+      ],
+      "category": "development"
+    },
+    {
       "name": "session-insights",
       "source": "./plugins/session-insights",
       "description": "Mine session history for durable improvements: extract non-obvious learnings into AGENTS.md files, and analyze usage patterns to suggest new skills, plugins, and agents.",
