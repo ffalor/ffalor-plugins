@@ -7,6 +7,23 @@
   },
   "plugins": [
     {
+      "name": "bouncer",
+      "source": "./plugins/bouncer",
+      "description": "Enforce condition-based guardrail rules on tool calls — deny or annotate any call whose content matches a markdown rule, instead of file-path-only rules; forge new rules from complaints with the omfg skill.",
+      "author": {
+        "name": "Frank Falor",
+        "url": "https://github.com/ffalor"
+      },
+      "license": "MIT",
+      "keywords": [
+        "guardrails",
+        "tool-call",
+        "regex",
+        "rules"
+      ],
+      "category": "development"
+    },
+    {
       "name": "session-insights",
       "source": "./plugins/session-insights",
       "description": "Mine session history for durable improvements: extract non-obvious learnings into AGENTS.md files, and analyze usage patterns to suggest new skills, plugins, and agents.",

@@ -1,0 +1,49 @@
+{
+  "name": "bouncer",
+  "version": "0.1.0",
+  "description": "Bouncer for Claude Code: enforce condition-based markdown guardrail rules on tool calls — deny or annotate any call whose content matches, instead of file-path-only rules.",
+  "author": {
+    "name": "Frank Falor",
+    "url": "https://github.com/ffalor"
+  },
+  "license": "MIT",
+  "userConfig": {
+    "enabled": {
+      "type": "boolean",
+      "title": "Bouncer enabled",
+      "description": "Master switch. False disables all rule matching (rules still listable via diagnostics).",
+      "required": false,
+      "default": true
+    },
+    "interruptMode": {
+      "type": "string",
+      "title": "Global interrupt mode",
+      "description": "always: deny matching tool calls. never: let the tool run and append the rule body as result context. Per-rule interruptMode overrides this.",
+      "required": false,
+      "default": "always",
+      "options": ["always", "never"]
+    },
+    "repeatMode": {
+      "type": "string",
+      "title": "Repeat mode",
+      "description": "once: each rule fires once per session. after-gap: re-arm after repeatGap completed user turns.",
+      "required": false,
+      "default": "once",
+      "options": ["once", "after-gap"]
+    },
+    "repeatGap": {
+      "type": "number",
+      "title": "Repeat gap (turns)",
+      "description": "Completed user turns before a rule may fire again under after-gap.",
+      "required": false,
+      "default": 10
+    },
+    "disabledRules": {
+      "type": "string",
+      "title": "Disabled rules",
+      "description": "Comma-separated filename-derived rule names to skip, e.g. \"no-box-leak, no-any\".",
+      "required": false,
+      "default": ""
+    }
+  }
+}

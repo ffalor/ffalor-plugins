@@ -14,6 +14,7 @@ claude plugin install <plugin>@ffalor-plugins
 
 | Plugin | What it does |
 | :-- | :-- |
+| `bouncer` | Enforces condition-based guardrail rules on tool calls — deny or annotate on content match, not just file path. `/bouncer:omfg` forges a new rule from a complaint about recurring behavior. |
 | `session-insights` | `/session-insights:learn` extracts non-obvious learnings from the current session into AGENTS.md files at the right directory level. `/session-insights:improve-workflow` reads past sessions and suggests what should become a skill, plugin, or agent. |
 | `submit-review` | Posts a code review with line-level comments to a GitHub PR via the `gh` CLI. |
 | `terraform-framework-reference` | Vendors the Terraform Plugin Framework and plugin-testing docs at the exact version your provider's `go.mod` compiles against, so lookups are verbatim and offline. Sync with `/terraform-framework-reference:update`. |
