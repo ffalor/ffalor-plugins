@@ -1,6 +1,6 @@
 {
   "name": "bouncer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Bouncer for Claude Code: enforce condition-based markdown guardrail rules on tool calls — deny or annotate any call whose content matches, instead of file-path-only rules.",
   "author": {
     "name": "Frank Falor",
