@@ -1,9 +1,9 @@
 # Bouncer mod for Claude Code (tool-call subset)
 
-A markdown rule names a
-recognizable mistake as a regex; when a tool call introduces matching content,
-the mod denies the call with the rule body as the error (default), or lets it
-run and appends the body as model-only result context (`interruptMode: never`).
+A markdown rule names a recognizable mistake as a regex; when a tool call
+introduces matching content, the mod denies the call with the rule body as
+the error (default), or lets it run and appends the body as model-only
+result context (`interruptMode: never`).
 
 Inspired by [oh-my-pi's Time-Traveling Stream Rules (TTSR)](https://omp.sh/docs/ttsr).
 Bouncer is a subset: it ports what Claude Code function-hook mods can enforce —
