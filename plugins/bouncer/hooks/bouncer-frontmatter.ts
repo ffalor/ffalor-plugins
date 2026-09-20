@@ -9,9 +9,10 @@ export interface RuleFrontmatter {
   enabled?: boolean;
   description?: string;
   interruptMode?: string;
+  repeatMode?: string;
+  repeatGap?: number;
   condition?: string[];
   scope?: string[];
-  agents?: string[];
   globs?: string[];
   /** Native Claude rules path gate (`paths:`); used as Bouncer path gate when set. */
   paths?: string[];
@@ -143,14 +144,19 @@ export function parseRuleFile(text: string): ParsedRuleFile | null {
   if (typeof raw["interruptMode"] === "string") {
     frontmatter.interruptMode = raw["interruptMode"].trim();
   }
+  if (typeof raw["repeatMode"] === "string") {
+    frontmatter.repeatMode = raw["repeatMode"].trim();
+  }
+  const gapRaw = raw["repeatGap"];
+  const gapNum =
+    typeof gapRaw === "number" ? gapRaw : typeof gapRaw === "string" ? Number(gapRaw.trim()) : NaN;
+  if (Number.isFinite(gapNum) && gapNum >= 0) frontmatter.repeatGap = Math.floor(gapNum);
   const globs = toStringList(raw["globs"]);
   if (globs !== null) frontmatter.globs = globs;
   const paths = toStringList(raw["paths"]);
   if (paths !== null) frontmatter.paths = paths;
   const scope = toStringList(raw["scope"]);
   if (scope !== null) frontmatter.scope = scope;
-  const agents = toStringList(raw["agents"]);
-  if (agents !== null) frontmatter.agents = agents;
   const condition = toStringList(conditionRaw);
   if (condition !== null) frontmatter.condition = condition;
   return { frontmatter, body };

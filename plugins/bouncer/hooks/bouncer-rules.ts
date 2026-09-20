@@ -36,8 +36,9 @@ export interface CompiledRule {
   digest: string;
   scopes: ParsedScope;
   globs: string[];
-  agents: string[] | undefined;
   interruptMode: string | undefined;
+  repeatMode: string | undefined;
+  repeatGap: number | undefined;
 }
 
 export interface DiscoveryResult {
@@ -143,8 +144,9 @@ export function compileRules(
       digest: fnv1a(rf.name + "\n" + regexSources.join("\n") + "\n" + body),
       scopes,
       globs: pathGate,
-      agents: fm.agents,
       interruptMode: fm.interruptMode,
+      repeatMode: fm.repeatMode,
+      repeatGap: fm.repeatGap,
     });
   }
   return { rules, diagnostics };

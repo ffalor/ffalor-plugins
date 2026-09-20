@@ -148,15 +148,9 @@ export function register(on: On, options: PluginOptions) {
     }
     const candidates = toolCandidates(tool, args);
     if (candidates.length === 0) return next(e);
-    const matched = matchToolRules(rules, tool, candidates, agentId);
+    const matched = matchToolRules(rules, tool, candidates);
     if (matched.length === 0) return next(e);
-    const eligible = selectEligible(
-      matched,
-      memory[sid] ?? {},
-      info,
-      config.repeatMode,
-      config.repeatGap,
-    );
+    const eligible = selectEligible(matched, memory[sid] ?? {}, info, config);
     if (eligible.length === 0) return next(e);
 
     const interrupting = eligible.filter((r) =>

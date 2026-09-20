@@ -55,6 +55,9 @@ The complaint is the message that invoked this skill (everything after
 - `body` MUST be markdown guidance explaining the right behavior concisely.
 - Optional: `interruptMode: always` (deny, default) vs `never` (advise
   after the run). Mention it in the assembled file only when `never` is wanted.
+- Optional: `repeatMode: once` (fire once per session, default) vs `after-gap`
+  (re-fire after `repeatGap` user turns), and `repeatGap` (default 10).
+  Mention them only when overriding the global repeat policy.
 
 Example shape:
 {
@@ -101,7 +104,9 @@ Example shape:
      condition: "<condition>"   # or ["a", "b"] for lists
      scope:
        - "tool:edit(*.ext)"
-     # interruptMode: never    # only when advising, else omit
+    # interruptMode: never    # only when advising, else omit
+    # repeatMode: after-gap   # only when overriding the global repeat policy, else omit
+    # repeatGap: 5            # only with after-gap, else omit
      ---
      <body>
      You MAY copy the script's printed file preview instead of hand-writing it.

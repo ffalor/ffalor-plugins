@@ -22,6 +22,13 @@ claude plugin install bouncer@ffalor-plugins
 
 Or session-only: `claude --plugin-dir <checkout>/ffalor-plugins/plugins/bouncer`.
 
+## Forging rules with /omfg
+
+When the agent keeps repeating a mistake, run `/omfg` with a short complaint
+(e.g. `/omfg keeps using any in TypeScript`). It drafts a rule that would
+have caught it, asks where to keep it, and saves the file. Rules take effect
+in new sessions.
+
 ## Rule locations
 
 Rules are ordinary Claude rules files — the mod reuses the native path and
@@ -41,7 +48,49 @@ the other is reported as shadowed. The rule name is the filename
 Use `bouncer-rules/` for guardrails you don't want injected as always-on
 context. Start a new session after adding or changing a rule (per-session load).
 
-## Rule format
+## Configuration
+
+### Per-rule fields
+
+- `description`: one-line summary, shown in diagnostics.
+- `condition`: JavaScript regex, or list of regexes (alternatives are ORed).
+  Must match the offending tool-call content. Leading `(?i)`/`(?m)`/`(?s)`
+  flags are supported. A bare file glob (e.g. `*.rs`) matches any edit/write
+  to that glob.
+- `scope`: which tools the rule watches. A comma-separated string or YAML
+  list of tokens: `tool` (every tool), `tool:<name>`,
+  `tool:<name>(<glob>)`, or a bare tool name such as `bash`.
+  Omit it to watch all tools.
+- `globs`: optional extra path gate. Native `paths:` doubles as the gate
+  when no `globs:` is given.
+- `interruptMode`: `always` denies the call with the rule body as the error;
+  `never` lets it run and appends the body as model-only result context.
+  Falls back to the global `interruptMode` when unset.
+- `repeatMode`: `once` fires this rule once per session; `after-gap` re-arms
+  after `repeatGap` user turns. Falls back to the global `repeatMode` when
+  unset or unknown.
+- `repeatGap`: completed user turns before this `after-gap` rule may fire
+  again. Falls back to the global `repeatGap` when unset or invalid.
+- `enabled: false`: disables the rule.
+
+### Plugin options
+
+Session defaults, set in plugin `userConfig`:
+
+- `enabled` (default `true`): master switch. `false` disables all rule matching.
+- `interruptMode` (default `always`): enforcement for rules without their own
+  `interruptMode`. `always` denies the call; `never` advises.
+- `repeatMode` (default `once`): `once` fires each rule once per session;
+  `after-gap` re-arms after `repeatGap` completed user turns. A rule's own
+  `repeatMode` overrides this. Suppression is per session (survives resume)
+  and resets when a rule's content changes.
+- `repeatGap` (default `10`): completed user turns before an `after-gap` rule
+  may fire again. A rule's own `repeatGap` overrides this.
+- `disabledRules` (default `""`): comma-separated rule names to skip.
+
+### Example
+
+Adapted from oh-my-pi's [`ts-no-tiny-functions`](https://github.com/can1357/oh-my-pi/blob/main/packages/coding-agent/src/discovery/builtin-rules/ts-no-tiny-functions.md) builtin rule (MIT).
 
 ````md
 ---
@@ -65,7 +114,7 @@ Inline functions whose whole body: one expression or `return`, unless name creat
 ```typescript
 // Bad — pure rename, no behavior added.
 function isEmpty(value: string): boolean {
-	return value.length === 0;
+  return value.length === 0;
 }
 
 const getDisplayName = (user: User) => user.profile.displayName;
@@ -87,53 +136,6 @@ const displayName = user.profile.displayName;
 
 If none apply, inline it.
 ````
-
-### Per-rule fields
-
-- `description`: one-line summary, shown in diagnostics.
-- `condition`: JavaScript regex, or list of regexes (alternatives are ORed).
-  Must match the offending tool-call content. Leading `(?i)`/`(?m)`/`(?s)`
-  flags are supported. A condition that looks like a bare file glob
-  (e.g. `*.rs`) is shorthand for matching any edit/write to that glob.
-- `scope`: which tools the rule watches. Tokens: `tool` (every tool),
-  `tool:<name>`, `tool:<name>(<glob>)`, or a bare tool name such as `bash`.
-  Omit it to watch all tools. `text`/`thinking`/`prose` tokens are ignored,
-  so a rule naming only those never matches.
-- `globs`: optional extra path gate. Native `paths:` doubles as the gate
-  when no `globs:` is given.
-- `interruptMode`: `always` denies the call (default); `never` lets it run
-  and appends the body as result context instead. Overrides the plugin default.
-- `agents`: optional gate to main/subagent sessions, e.g. `['main']`.
-- `enabled: false`: disables the rule.
-
-## Plugin options
-
-These are session policy and defaults; per-rule frontmatter above is where
-individual rules vary. `interruptMode` here is the default that a rule's own
-`interruptMode` overrides.
-
-`enabled` (default true), `interruptMode` (`always` default; `never` advises),
-`repeatMode` (`once` per session default; `after-gap` with `repeatGap` user
-turns, default 10), `disabledRules` (comma-separated rule names).
-
-## Behavior notes
-
-- A denied call stays in the transcript as a tool error; the model reads the
-  rule body and retries through the normal tool loop.
-- `once`/`after-gap` suppression is per session (survives resume) and resets
-  when a rule's content changes.
-- Enforcement never depends on UI; toasts/logs are diagnostics only.
-
-## Forging rules with /omfg
-
-Complaining about recurring behavior? The `omfg` skill turns the complaint
-into a rule file. Run `/omfg <complaint>`, or just complain in plain words
-("keeps doing X") and the skill picks it up on its own.
-
-It finds the offending output in the transcript, drafts a rule, checks the
-regex and scope with `scripts/omfg-validate.mjs`, asks where to save it, and
-writes the file. Prefer `.claude/bouncer-rules/` unless you also want the
-rule injected as always-on context. New session required to activate it.
 
 ## Verify
 

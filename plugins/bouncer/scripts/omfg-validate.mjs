@@ -194,7 +194,7 @@ function formatFrontmatterStringArray(values) {
   return `[${values.map((v) => JSON.stringify(v)).join(", ")}]`;
 }
 
-function assembleRuleMarkdown({ description, condition, scope, body, interruptMode }) {
+function assembleRuleMarkdown({ description, condition, scope, body, interruptMode, repeatMode, repeatGap }) {
   const lines = [
     "---",
     `description: ${JSON.stringify(description)}`,
@@ -202,6 +202,8 @@ function assembleRuleMarkdown({ description, condition, scope, body, interruptMo
     `scope: ${formatFrontmatterStringArray(scope)}`,
   ];
   if (interruptMode === "never") lines.push(`interruptMode: never`);
+  if (repeatMode === "once" || repeatMode === "after-gap") lines.push(`repeatMode: ${repeatMode}`);
+  if (typeof repeatGap === "number") lines.push(`repeatGap: ${repeatGap}`);
   lines.push("---", "", body.trim().replace(/\r\n?/g, "\n"));
   return lines.join("\n") + "\n";
 }
@@ -285,6 +287,21 @@ function main() {
     const v = interruptModeRaw.trim().toLowerCase();
     if (v === "never" || v === "always") interruptMode = v;
     else warnings.push(`Unknown interruptMode ${JSON.stringify(interruptModeRaw)}; using global default.`);
+  }
+
+  const repeatModeRaw = stringField(payload, "repeatMode");
+  let repeatMode = null;
+  if (repeatModeRaw) {
+    const v = repeatModeRaw.trim().toLowerCase();
+    if (v === "once" || v === "after-gap") repeatMode = v;
+    else warnings.push(`Unknown repeatMode ${JSON.stringify(repeatModeRaw)}; using global default.`);
+  }
+  const repeatGapRaw = payload.repeatGap;
+  let repeatGap = null;
+  if (repeatGapRaw !== undefined && repeatGapRaw !== null && repeatGapRaw !== "") {
+    const n = typeof repeatGapRaw === "number" ? repeatGapRaw : Number(String(repeatGapRaw).trim());
+    if (Number.isFinite(n) && n >= 0) repeatGap = Math.floor(n);
+    else warnings.push(`Invalid repeatGap ${JSON.stringify(repeatGapRaw)}; using global default.`);
   }
 
   // Normalize conditions: compile, else try single-unescape repair (OMP).
@@ -394,6 +411,8 @@ function main() {
       scope: scopes,
       body,
       interruptMode,
+      repeatMode,
+      repeatGap,
     });
     try {
       writeFileSync(emitPath, fileContent);
@@ -411,6 +430,8 @@ function main() {
       scope: scopes,
       body,
       interruptMode,
+      repeatMode,
+      repeatGap,
     }));
   }
   process.exit(ok ? 0 : 1);

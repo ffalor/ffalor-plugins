@@ -52,30 +52,6 @@ export function toolCandidates(tool: string, args: Record<string, unknown>): Too
   return [{ path, text: parts.join("\n") }];
 }
 
-function agentLabelMatches(agents: readonly string[] | undefined, agentId: string | undefined): boolean {
-  if (!agents || agents.length === 0) return true;
-  const labels = ["*", "main", "subagent"];
-  const id = (agentId ?? "").toLowerCase();
-  if (id) labels.push(id);
-  else labels.push("main");
-  const loop = agentId ? "subagent" : "main";
-  for (const pattern of agents) {
-    const p = pattern.trim().toLowerCase();
-    if (p === "main" && loop === "main") return true;
-    if (p === "subagent" && loop === "subagent") return true;
-    if (p === id && id.length > 0) return true;
-    // Small glob over the loop/id labels (no path semantics needed).
-    try {
-      const src = "^" + p.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*").replace(/\?/g, ".") + "$";
-      const re = new RegExp(src);
-      if (labels.some((l) => re.test(l))) return true;
-    } catch {
-      if (labels.includes(p)) return true;
-    }
-  }
-  return false;
-}
-
 /**
  * Match fully-typed tool input against every rule. Returns distinct
  * matching rules in discovery order. ast-only rules never match.
@@ -84,13 +60,11 @@ export function matchToolRules(
   rules: readonly CompiledRule[],
   tool: string,
   candidates: readonly ToolCandidate[],
-  agentId: string | undefined,
 ): CompiledRule[] {
   const toolLower = tool.toLowerCase();
   const matched: CompiledRule[] = [];
   for (const rule of rules) {
     if (rule.regexes.length === 0) continue;
-    if (!agentLabelMatches(rule.agents, agentId)) continue;
     let hit = false;
     for (const candidate of candidates) {
       if (hit) break;

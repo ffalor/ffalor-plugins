@@ -67,3 +67,19 @@ export function toolShouldInterrupt(
   if (mode === "never") return false;
   return global === "always";
 }
+
+/**
+ * Per-rule repeat policy with fallback to global. Unknown rule values
+ * fall back just like interruptMode above.
+ */
+export function ruleRepeatMode(global: RepeatMode, rule: string | undefined): RepeatMode {
+  const mode = (rule ?? "").trim().toLowerCase();
+  if (mode === "once" || mode === "after-gap") return mode;
+  return global;
+}
+
+export function ruleRepeatGap(globalGap: number, rule: number | undefined): number {
+  return typeof rule === "number" && Number.isFinite(rule) && rule >= 0
+    ? Math.floor(rule)
+    : globalGap;
+}

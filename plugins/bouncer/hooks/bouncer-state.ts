@@ -5,7 +5,8 @@
 // site, never pass $ into helpers). A rule whose digest changed since
 // its mark is treated as edited and re-arms.
 
-import type { RepeatMode } from "./bouncer-config";
+import type { BouncerConfig } from "./bouncer-config";
+import { ruleRepeatGap, ruleRepeatMode } from "./bouncer-config";
 import type { CompiledRule } from "./bouncer-rules";
 
 export interface TurnInfo {
@@ -65,16 +66,15 @@ export function selectEligible(
   rules: readonly CompiledRule[],
   marks: LoopMarks,
   info: TurnInfo,
-  mode: RepeatMode,
-  gap: number,
+  config: BouncerConfig,
 ): CompiledRule[] {
   const perLoop = marks[info.loop] ?? {};
   return rules.filter((r) => {
     const mark = perLoop[r.name.toLowerCase()];
     if (!mark) return true;
     if (mark.digest !== r.digest) return true; // rule edited: re-arm
-    if (mode === "once") return false;
-    return info.turns - mark.turn >= gap;
+    if (ruleRepeatMode(config.repeatMode, r.repeatMode) === "once") return false;
+    return info.turns - mark.turn >= ruleRepeatGap(config.repeatGap, r.repeatGap);
   });
 }
 
